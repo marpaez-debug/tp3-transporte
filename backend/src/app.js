@@ -1,0 +1,34 @@
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import { pool } from './config/db.js';
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+app.get('/api/health', async (req, res) => {
+  try {
+    await pool.query('SELECT 1');
+    res.json({ status: 'ok' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'No se pudo conectar a la base de datos' });
+  }
+});
+
+
+// 404: ruta inexistente
+app.use((req, res) => {
+  res.status(404).json({ error: 'Ruta no encontrada' });
+});
+
+// 500: errores no controlados
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Error interno del servidor' });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Servidor escuchando en http://localhost:${PORT}`));
