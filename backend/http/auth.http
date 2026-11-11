@@ -9,6 +9,7 @@ Content-Type: application/json
 }
 
 ### Login
+# @name login
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
@@ -16,3 +17,10 @@ Content-Type: application/json
   "email": "marti@test.com",
   "contrasena": "12345678"
 }
+
+### Perfil con token (primero hay que mandar el Login)
+GET http://localhost:3000/api/auth/me
+Authorization: Bearer {{login.response.body.token}}
+
+### Perfil sin token (debe dar 401)
+GET http://localhost:3000/api/auth/me
