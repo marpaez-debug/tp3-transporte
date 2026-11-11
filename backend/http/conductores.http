@@ -1,0 +1,88 @@
+### Login 
+# @name login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "marti@test.com",
+  "contrasena": "12345678"
+}
+
+### Crear conductor
+POST http://localhost:3000/api/conductores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "numero_documento": "30123456",
+  "numero_licencia": "LIC-0001",
+  "fecha_alta_licencia": "2020-03-15",
+  "fecha_vencimiento_licencia": "2030-03-15"
+}
+
+### Listar conductores
+GET http://localhost:3000/api/conductores
+Authorization: Bearer {{login.response.body.token}}
+
+### Listar filtrando por apellido
+GET http://localhost:3000/api/conductores?apellido=perez
+Authorization: Bearer {{login.response.body.token}}
+
+### Obtener conductor por id
+GET http://localhost:3000/api/conductores/1
+Authorization: Bearer {{login.response.body.token}}
+
+### Actualizar conductor
+PUT http://localhost:3000/api/conductores/1
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "nombre": "Juan Carlos",
+  "apellido": "Pérez",
+  "numero_documento": "30123456",
+  "numero_licencia": "LIC-0001",
+  "fecha_alta_licencia": "2020-03-15",
+  "fecha_vencimiento_licencia": "2031-03-15"
+}
+
+### Eliminar conductor
+DELETE http://localhost:3000/api/conductores/1
+Authorization: Bearer {{login.response.body.token}}
+
+### Error 400: datos inválidos
+POST http://localhost:3000/api/conductores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "nombre": "",
+  "apellido": "Gómez",
+  "numero_documento": "12",
+  "numero_licencia": "",
+  "fecha_alta_licencia": "2025-13-45",
+  "fecha_vencimiento_licencia": "ayer"
+}
+
+### Error 400: vencimiento anterior al alta
+POST http://localhost:3000/api/conductores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "nombre": "Ana",
+  "apellido": "Gómez",
+  "numero_documento": "28999111",
+  "numero_licencia": "LIC-0002",
+  "fecha_alta_licencia": "2024-05-10",
+  "fecha_vencimiento_licencia": "2023-05-10"
+}
+
+### Error 404: id inexistente
+GET http://localhost:3000/api/conductores/9999
+Authorization: Bearer {{login.response.body.token}}
+
+### Error 401: sin token
+GET http://localhost:3000/api/conductores
