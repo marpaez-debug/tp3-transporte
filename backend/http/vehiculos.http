@@ -1,0 +1,71 @@
+### Login 
+# @name login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "marti@test.com",
+  "contrasena": "12345678"
+}
+
+### Crear vehículo
+POST http://localhost:3000/api/vehiculos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "marca": "Mercedes-Benz",
+  "modelo": "Actros 2041",
+  "patente": "AB123CD",
+  "anio": 2020,
+  "capacidad_carga": 18000
+}
+
+### Listar vehículos
+GET http://localhost:3000/api/vehiculos
+Authorization: Bearer {{login.response.body.token}}
+
+### Listar filtrando por marca
+GET http://localhost:3000/api/vehiculos?marca=mercedes
+Authorization: Bearer {{login.response.body.token}}
+
+### Obtener vehículo por id
+GET http://localhost:3000/api/vehiculos/1
+Authorization: Bearer {{login.response.body.token}}
+
+### Actualizar vehículo
+PUT http://localhost:3000/api/vehiculos/1
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "marca": "Mercedes-Benz",
+  "modelo": "Actros 2045",
+  "patente": "AB123CD",
+  "anio": 2021,
+  "capacidad_carga": 20000
+}
+
+### Eliminar vehículo
+DELETE http://localhost:3000/api/vehiculos/1
+Authorization: Bearer {{login.response.body.token}}
+
+### Error 400: datos inválidos
+POST http://localhost:3000/api/vehiculos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "marca": "",
+  "modelo": "Actros",
+  "patente": "123",
+  "anio": 1800,
+  "capacidad_carga": -5
+}
+
+### Error 404: id inexistente
+GET http://localhost:3000/api/vehiculos/9999
+Authorization: Bearer {{login.response.body.token}}
+
+### Error 401: sin token
+GET http://localhost:3000/api/vehiculos
