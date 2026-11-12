@@ -1,0 +1,144 @@
+### Login 
+# @name login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "marti@test.com",
+  "contrasena": "12345678"
+}
+
+### Crear viaje 1
+POST http://localhost:3000/api/viajes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": 1,
+  "conductor_id": 1,
+  "fecha_salida": "2026-11-01 08:00",
+  "fecha_llegada": "2026-11-01 18:30",
+  "origen": "La Rioja",
+  "destino": "Córdoba",
+  "kilometros": 450,
+  "observaciones": "Carga completa"
+}
+
+### Crear viaje 2
+POST http://localhost:3000/api/viajes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": 1,
+  "conductor_id": 1,
+  "fecha_salida": "2026-11-05 07:00",
+  "fecha_llegada": "2026-11-05 11:00",
+  "origen": "La Rioja",
+  "destino": "Catamarca",
+  "kilometros": 150
+}
+
+### Listar viajes
+GET http://localhost:3000/api/viajes
+Authorization: Bearer {{login.response.body.token}}
+
+### Listar viajes de un vehículo
+GET http://localhost:3000/api/viajes?vehiculo_id=1
+Authorization: Bearer {{login.response.body.token}}
+
+### Listar viajes de un conductor
+GET http://localhost:3000/api/viajes?conductor_id=1
+Authorization: Bearer {{login.response.body.token}}
+
+### Obtener viaje por id
+GET http://localhost:3000/api/viajes/1
+Authorization: Bearer {{login.response.body.token}}
+
+### Actualizar viaje
+PUT http://localhost:3000/api/viajes/1
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": 1,
+  "conductor_id": 1,
+  "fecha_salida": "2026-11-01 08:00",
+  "fecha_llegada": "2026-11-01 19:00",
+  "origen": "La Rioja",
+  "destino": "Córdoba",
+  "kilometros": 460,
+  "observaciones": "Demora por controles"
+}
+
+### Historial y total de kilómetros por vehículo
+GET http://localhost:3000/api/viajes/vehiculo/1
+Authorization: Bearer {{login.response.body.token}}
+
+### Historial y total de kilómetros por conductor
+GET http://localhost:3000/api/viajes/conductor/1
+Authorization: Bearer {{login.response.body.token}}
+
+### Eliminar viaje
+DELETE http://localhost:3000/api/viajes/2
+Authorization: Bearer {{login.response.body.token}}
+
+### Error 400: datos inválidos
+POST http://localhost:3000/api/viajes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": "abc",
+  "conductor_id": 0,
+  "fecha_salida": "ayer",
+  "fecha_llegada": "2026-13-45 10:00",
+  "origen": "",
+  "destino": "",
+  "kilometros": -10
+}
+
+### Error 400: llegada anterior a la salida
+POST http://localhost:3000/api/viajes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": 1,
+  "conductor_id": 1,
+  "fecha_salida": "2026-11-10 18:00",
+  "fecha_llegada": "2026-11-10 08:00",
+  "origen": "La Rioja",
+  "destino": "Tucumán",
+  "kilometros": 400
+}
+
+### Error 400: vehículo inexistente
+POST http://localhost:3000/api/viajes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": 9999,
+  "conductor_id": 1,
+  "fecha_salida": "2026-11-10 08:00",
+  "fecha_llegada": "2026-11-10 18:00",
+  "origen": "La Rioja",
+  "destino": "Tucumán",
+  "kilometros": 400
+}
+
+### Error 400: no se puede eliminar un vehículo con viajes
+DELETE http://localhost:3000/api/vehiculos/1
+Authorization: Bearer {{login.response.body.token}}
+
+### Error 404: viaje inexistente
+GET http://localhost:3000/api/viajes/9999
+Authorization: Bearer {{login.response.body.token}}
+
+### Error 404: historial de un vehículo inexistente
+GET http://localhost:3000/api/viajes/vehiculo/9999
+Authorization: Bearer {{login.response.body.token}}
+
+### Error 401: sin token
+GET http://localhost:3000/api/viajes
