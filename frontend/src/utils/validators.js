@@ -5,3 +5,27 @@ export const emailValido = (valor) =>
 
 export const minimo = (valor, largo, mensaje) =>
   String(valor ?? '').length >= largo ? '' : mensaje;
+
+export const maximo = (valor, largo, mensaje) =>
+  String(valor ?? '').length <= largo ? '' : mensaje;
+
+export const enteroEnRango = (valor, min, max, mensaje) => {
+  const texto = String(valor ?? '').trim();
+  const numero = Number(texto);
+  return texto !== '' && Number.isInteger(numero) && numero >= min && numero <= max
+    ? ''
+    : mensaje;
+};
+
+export const numeroMayorACero = (valor, mensaje) => {
+  const texto = String(valor ?? '').trim().replace(',', '.');
+  const numero = Number(texto);
+  return texto !== '' && Number.isFinite(numero) && numero > 0 ? '' : mensaje;
+};
+
+export const patenteValida = (valor) => {
+  const limpia = String(valor ?? '').replace(/[\s-]/g, '').toUpperCase();
+  return /^([A-Z]{3}\d{3}|[A-Z]{2}\d{3}[A-Z]{2})$/.test(limpia)
+    ? ''
+    : 'Patente inválida (ejemplos: ABC123 o AB123CD)';
+};

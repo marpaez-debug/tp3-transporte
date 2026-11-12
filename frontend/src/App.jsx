@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Inicio from './pages/Inicio.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
+import Vehiculos from './pages/Vehiculos.jsx';
 
 function EnConstruccion({ titulo }) {
   return (
@@ -33,7 +34,7 @@ export default function App() {
 
         <Route
           path="vehiculos"
-          element={<ProtectedRoute><EnConstruccion titulo="Vehículos" /></ProtectedRoute>}
+          element={<ProtectedRoute><Vehiculos /></ProtectedRoute>}
         />
         <Route
           path="conductores"
