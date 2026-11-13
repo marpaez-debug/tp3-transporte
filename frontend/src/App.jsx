@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import Conductores from './pages/Conductores.jsx';
 import Inicio from './pages/Inicio.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
@@ -38,7 +39,7 @@ export default function App() {
         />
         <Route
           path="conductores"
-          element={<ProtectedRoute><EnConstruccion titulo="Conductores" /></ProtectedRoute>}
+          element={<ProtectedRoute><Conductores /></ProtectedRoute>}
         />
         <Route
           path="viajes"
