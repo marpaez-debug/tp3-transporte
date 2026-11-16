@@ -49,3 +49,16 @@ export const fechaValida = (valor, mensaje) => {
 // Comprueba que "despues" sea posterior a "antes" (ambas AAAA-MM-DD)
 export const fechaPosterior = (antes, despues, mensaje) =>
   String(despues) > String(antes) ? '' : mensaje;
+
+// Fecha y hora en formato AAAA-MM-DDTHH:mm (el que devuelve <input type="datetime-local">)
+export const fechaHoraValida = (valor, mensaje) => {
+  const texto = String(valor ?? '').trim();
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(texto)) return mensaje;
+  const [hora, minutos] = texto.slice(11).split(':').map(Number);
+  if (hora > 23 || minutos > 59) return mensaje;
+  return fechaValida(texto.slice(0, 10), mensaje);
+};
+
+// Comprueba que "despues" no sea anterior a "antes" (mismo formato de texto)
+export const noAnterior = (antes, despues, mensaje) =>
+  String(despues) >= String(antes) ? '' : mensaje;

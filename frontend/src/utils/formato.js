@@ -19,3 +19,7 @@ export const hoy = () => {
   const dia = String(ahora.getDate()).padStart(2, '0');
   return `${ahora.getFullYear()}-${mes}-${dia}`;
 };
+
+// Convierte "2026-11-01 08:00:00" al valor que usa <input type="datetime-local">
+export const aInputFechaHora = (valor) =>
+  valor ? String(valor).slice(0, 16).replace(' ', 'T') : '';

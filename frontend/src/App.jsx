@@ -6,15 +6,7 @@ import Inicio from './pages/Inicio.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Vehiculos from './pages/Vehiculos.jsx';
-
-function EnConstruccion({ titulo }) {
-  return (
-    <section className="panel">
-      <h1>{titulo}</h1>
-      <p>Esta sección se construye en el próximo paso.</p>
-    </section>
-  );
-}
+import Viajes from './pages/Viajes.jsx';
 
 function NoEncontrada() {
   return (
@@ -43,7 +35,7 @@ export default function App() {
         />
         <Route
           path="viajes"
-          element={<ProtectedRoute><EnConstruccion titulo="Viajes" /></ProtectedRoute>}
+          element={<ProtectedRoute><Viajes /></ProtectedRoute>}
         />
 
         <Route path="*" element={<NoEncontrada />} />
