@@ -8,6 +8,8 @@ const SELECT_VIAJE = `
   JOIN vehiculos ve ON ve.id = v.vehiculo_id
   JOIN conductores c ON c.id = v.conductor_id`;
 
+const MENSAJE_LICENCIA = 'El conductor no tiene la licencia vigente en la fecha de salida';
+
 const errorReferencia = (error) => {
   if (error.code !== 'ER_NO_REFERENCED_ROW_2') return null;
   return error.sqlMessage?.includes('fk_viaje_vehiculo')
@@ -17,6 +19,18 @@ const errorReferencia = (error) => {
 
 const sumarKilometros = (viajes) =>
   Math.round(viajes.reduce((acc, v) => acc + Number(v.kilometros), 0) * 100) / 100;
+
+// El conductor solo puede salir de viaje si su licencia está vigente el día de la salida
+const licenciaVigente = async (conductorId, fechaSalida) => {
+  const [rows] = await pool.query(
+    'SELECT fecha_alta_licencia, fecha_vencimiento_licencia FROM conductores WHERE id = ?',
+    [conductorId]
+  );
+  // Si el conductor no existe, la clave foránea devuelve el error correspondiente
+  if (rows.length === 0) return true;
+  const dia = String(fechaSalida).slice(0, 10);
+  return dia >= rows[0].fecha_alta_licencia && dia <= rows[0].fecha_vencimiento_licencia;
+};
 
 export const listar = async (req, res, next) => {
   try {
@@ -54,6 +68,11 @@ export const obtener = async (req, res, next) => {
 export const crear = async (req, res, next) => {
   try {
     const { vehiculo_id, conductor_id, fecha_salida, fecha_llegada, origen, destino, kilometros, observaciones } = req.body;
+
+    if (!(await licenciaVigente(conductor_id, fecha_salida))) {
+      return res.status(403).json({ error: MENSAJE_LICENCIA });
+    }
+
     const [result] = await pool.query(
       `INSERT INTO viajes
        (vehiculo_id, conductor_id, fecha_salida, fecha_llegada, origen, destino, kilometros, observaciones)
@@ -72,6 +91,11 @@ export const crear = async (req, res, next) => {
 export const actualizar = async (req, res, next) => {
   try {
     const { vehiculo_id, conductor_id, fecha_salida, fecha_llegada, origen, destino, kilometros, observaciones } = req.body;
+
+    if (!(await licenciaVigente(conductor_id, fecha_salida))) {
+      return res.status(403).json({ error: MENSAJE_LICENCIA });
+    }
+
     const [result] = await pool.query(
       `UPDATE viajes
        SET vehiculo_id = ?, conductor_id = ?, fecha_salida = ?, fecha_llegada = ?,

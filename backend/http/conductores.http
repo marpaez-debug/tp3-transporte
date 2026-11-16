@@ -86,3 +86,16 @@ Authorization: Bearer {{login.response.body.token}}
 
 ### Error 401: sin token
 GET http://localhost:3000/api/conductores
+### Crear conductor con licencia vencida (sirve para probar el 403 en viajes)
+POST http://localhost:3000/api/conductores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "nombre": "Carlos",
+  "apellido": "Gómez",
+  "numero_documento": "27555111",
+  "numero_licencia": "LIC-VENCIDA",
+  "fecha_alta_licencia": "2015-01-10",
+  "fecha_vencimiento_licencia": "2020-01-10"
+}

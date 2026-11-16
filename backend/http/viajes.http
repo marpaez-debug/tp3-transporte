@@ -142,3 +142,17 @@ Authorization: Bearer {{login.response.body.token}}
 
 ### Error 401: sin token
 GET http://localhost:3000/api/viajes
+### Error 403: conductor con licencia vencida (cambiá conductor_id por el id que devolvió el conductor vencido)
+POST http://localhost:3000/api/viajes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": 1,
+  "conductor_id": 5,
+  "fecha_salida": "2026-11-20 08:00",
+  "fecha_llegada": "2026-11-20 18:00",
+  "origen": "La Rioja",
+  "destino": "Tucumán",
+  "kilometros": 400
+}
